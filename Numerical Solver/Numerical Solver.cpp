@@ -2,11 +2,26 @@
 //
 
 #include <iostream>
+using namespace std;
 #include "Linear_system.h"
+#include "Matrix.h"
 
 int main()
 {
-    std::cout << "Hello World!\n";
+    //double temp[20] = { 1, 1, -3, 1, 2, -5, 3, -4, 1, 0, 1, 2, 2, -1, 1, 1, 2, 6, 2, 12};
+    double temp[12] = { 1, 2, 3, 6, 4, 5, 6, 7, 8, 9, 10, 12 };
+    //Matrix tt(1, 3, t); //always pass list of rows, not columns.
+    //Matrix x(3, 4, temp);
+    //cout << x;
+    //cout << " and the b matrix is" << endl;
+    //cout << tt; 
+    //Linear_system A(3, 3, x, tt);
+    Linear_system B(3, 4, temp);
+    Matrix x = B.solve();
+    cout << x;
+    int ss;
+    cin >> ss;
+    return 0;
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu

@@ -1,21 +1,23 @@
 #pragma once
-#include <vector>
 #include <array>
+#include "Matrix.h"
 class Linear_system
 {
 private:
 	bool valid_solution;
-	int n;
-	int m;
-	double* A;
-	double* b;
+	const int n;
+	const int m;
+	Matrix A;
+	double* x;
 
 public:
 	//default constructor
-	Linear_system(); 
-	Linear_system(const int* n, const int* m);
+	Linear_system(const int& x, const int& y);
+	Linear_system(const int& x, const int& y, const double a[]);
+	Linear_system(const int& x, const int& y, const Matrix& A);
 	~Linear_system();
-	double* solve();
+	
+	Matrix solve();
 
 };
 
