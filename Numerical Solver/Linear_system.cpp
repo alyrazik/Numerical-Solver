@@ -1,7 +1,8 @@
 #include "Linear_system.h"
+double ILL_CONDITIONING = 0.001;
 
 Linear_system::Linear_system(const int& x, const int& y)
-	:valid_solution(true)
+	:valid_solution(false)
 	,n(x)
 	,m(y)
 	,A(n, m)
@@ -14,7 +15,7 @@ Linear_system::~Linear_system()
 }
 
 Linear_system::Linear_system(const int& x, const int& y, const double a[])
-	:valid_solution(true)
+	:valid_solution(false)
 	,n(x)
 	,m(y)
 	,A(x, y, a)
@@ -22,7 +23,7 @@ Linear_system::Linear_system(const int& x, const int& y, const double a[])
 {
 }
 Linear_system::Linear_system(const int& x, const int& y, const Matrix& A)
-	:valid_solution(true)
+	:valid_solution(false)
 	,n(x)
 	,m(y)
 	,A(A)
@@ -31,7 +32,7 @@ Linear_system::Linear_system(const int& x, const int& y, const Matrix& A)
 }
 
 Linear_system::Linear_system(const Matrix& A, const Matrix& b)
-	:valid_solution(true)
+	:valid_solution(false)
 	, n(A.n_rows())
 	, m(1+A.n_rows())
 	, A(A.augment(b))
@@ -59,6 +60,10 @@ Matrix Linear_system::solve()
 				x[i] = x[i] - A.at(i, j) * x[j];
 		x[i] = x[i] / A.at(i, i);
 	}
+	double diagonal=1;
+	for (int i = 0; i < n; i++)
+		diagonal = diagonal * A.at(i, i);
+	valid_solution = (diagonal >= ILL_CONDITIONING);
 	return Matrix(n,1,x);
 }
 

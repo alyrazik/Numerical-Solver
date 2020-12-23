@@ -19,6 +19,7 @@ public:
 	~Linear_system();
 	
 	Matrix solve();
+	bool is_valid_solution() { return valid_solution;}
 
 };
 

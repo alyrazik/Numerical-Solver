@@ -9,10 +9,10 @@ int main()
     double temp[20] = { 1, 1, -3, 1, -2, -3, 3, -4, 1, 0, 1, 0, 2, -1, -1, 1, 2, 0, 0, -12};
     double t[3] = { 1, 2, 3 };
     double as [16] = { 1, 1, -3, 1, -3, 3, -4, 1, 1, 0, 2, -1, 1, 2, 0, 0 };
-    double bs [4] = { 2, 0, 1, 12 };
+    double bs [4] = { -2, 0, -1, -12 };
     Matrix A(4, 4, as);
     Matrix b(4, 1, bs);
-    Matrix out = A.augment(b);
+    Matrix out = A.augment(b); //don't forget to multiply with -1 to the b elements.
     cout << out << endl;
     cout << A << endl;
     cout << b << endl;
@@ -20,6 +20,7 @@ int main()
     Linear_system x(A, b);
     Matrix sol = x.solve();
     cout << "solution" << endl<< sol;
+    cout <<"system is "<< x.is_valid_solution();
     //Matrix tt(3, 1, t);
     //Matrix x(3, 4, temp);
     //cout << x;

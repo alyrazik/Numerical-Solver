@@ -8,7 +8,7 @@ Matrix::Matrix(const int& x, const int& y)
 {
 }
 
-Matrix::Matrix(const Matrix& m2)
+Matrix::Matrix(const Matrix& m2) //copy constructor is needed. One method returns a Matrix type and one variable is a pointer.
 {
     n = m2.n;
     m = m2.m;
