@@ -1,7 +1,8 @@
 #include "Linear_system.h"
 
 Linear_system::Linear_system(const int& x, const int& y)
-	:n(x)
+	:valid_solution(true)
+	,n(x)
 	,m(y)
 	,A(n, m)
 	,x(new double[n])
@@ -13,17 +14,28 @@ Linear_system::~Linear_system()
 }
 
 Linear_system::Linear_system(const int& x, const int& y, const double a[])
-	:n(x)
+	:valid_solution(true)
+	,n(x)
 	,m(y)
 	,A(x, y, a)
 	,x(new double[n])
 {
 }
 Linear_system::Linear_system(const int& x, const int& y, const Matrix& A)
-	:n(x)
+	:valid_solution(true)
+	,n(x)
 	,m(y)
 	,A(A)
 	,x(new double[n])
+{
+}
+
+Linear_system::Linear_system(const Matrix& A, const Matrix& b)
+	:valid_solution(true)
+	, n(A.n_rows())
+	, m(1+A.n_rows())
+	, A(A.augment(b))
+	, x(new double[n])
 {
 }
 

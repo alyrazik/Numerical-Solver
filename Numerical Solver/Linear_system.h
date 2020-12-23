@@ -15,6 +15,7 @@ public:
 	Linear_system(const int& x, const int& y);
 	Linear_system(const int& x, const int& y, const double a[]);
 	Linear_system(const int& x, const int& y, const Matrix& A);
+	Linear_system(const Matrix& A, const Matrix& b);
 	~Linear_system();
 	
 	Matrix solve();

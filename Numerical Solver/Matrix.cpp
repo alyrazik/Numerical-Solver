@@ -8,10 +8,45 @@ Matrix::Matrix(const int& x, const int& y)
 {
 }
 
+Matrix::Matrix(const Matrix& m2)
+{
+    n = m2.n;
+    m = m2.m;
+    array = new double[n*m];
+    for (int i = 0; i < n * m; i++)
+        array[i] = m2.array[i];
+}
+
 Matrix::~Matrix()
 {
     delete array;
 }
+
+int Matrix::n_rows() const
+{
+    return n;
+}
+
+int Matrix::n_cols() const
+{
+    return m;
+}
+
+Matrix Matrix::augment(const Matrix& y) const
+{
+    Matrix temp(n, m + y.n_cols());
+    for (int k = 0; k < n; k++)
+    {
+        for (int i = 0; i < m; i++)
+            temp.set_at(k, i, this->at(k, i));
+        for (int j = 0; j < y.n_cols(); j++)
+            temp.set_at(k, j+m, y.at(k, j));
+    }
+    //std::cout << temp;
+    return temp;
+}
+
+
 
 double Matrix::at(const int& i, const int& j) const
 {

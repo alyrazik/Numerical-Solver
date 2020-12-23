@@ -1,6 +1,4 @@
 // Numerical Solver.cpp : This file contains the 'main' function. Program execution begins and ends there.
-//
-
 #include <iostream>
 using namespace std;
 #include "Linear_system.h"
@@ -9,17 +7,28 @@ using namespace std;
 int main()
 {
     double temp[20] = { 1, 1, -3, 1, -2, -3, 3, -4, 1, 0, 1, 0, 2, -1, -1, 1, 2, 0, 0, -12};
-    //double temp[12] = { 1,1,1,-6,1,2,-1,-2,2,-0.5,1,-4 };
     double t[3] = { 1, 2, 3 };
-    Matrix tt(3, 1, t); //always pass list of rows, not columns.
+    double as [16] = { 1, 1, -3, 1, -3, 3, -4, 1, 1, 0, 2, -1, 1, 2, 0, 0 };
+    double bs [4] = { 2, 0, 1, 12 };
+    Matrix A(4, 4, as);
+    Matrix b(4, 1, bs);
+    Matrix out = A.augment(b);
+    cout << out << endl;
+    cout << A << endl;
+    cout << b << endl;
+    //cout << x << endl;
+    Linear_system x(A, b);
+    Matrix sol = x.solve();
+    cout << "solution" << endl<< sol;
+    //Matrix tt(3, 1, t);
     //Matrix x(3, 4, temp);
     //cout << x;
     //cout << " and the b matrix is" << endl;
     //cout << tt; 
     //Linear_system A(3, 3, x, tt);
-    Linear_system B(4, 5, temp);
-    Matrix x = B.solve();
-    cout << x;
+    //Linear_system B(4, 5, temp);
+    //Matrix x = B.solve();
+    //cout << x;
     //cout << tt;
   
     int ss;
