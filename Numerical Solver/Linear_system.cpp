@@ -31,25 +31,22 @@ Linear_system::Linear_system(const int& x, const int& y, const Matrix& A)
 Matrix Linear_system::solve()
 {
 	//elimination
-	for (int k = 1; k <= n - 1; k++)  
-		for (int i = k + 1; i <= n; i++)
+	for (int k = 0; k < n; k++)  
+		for (int i = k + 1; i < n; i++)
 		{
-			double factor = A.at(i-1, k-1) / A.at(k-1, k-1);
-			for (int j = k + 1; j <= m; j++)
-				A.set_at(i-2, j-1, A.at(i-2, j-1) - factor * A.at(k-1, j-1));
-			//A.set_at(i - 1, m - 1, A.at(i - 1, m - 1) - factor * A.at(k - 1, m - 1));
+			double factor = A.at(i, k) / A.at(k, k);
+			for (int j = k ; j <m+1; j++) //m+1 since our A matrix is augmented, we start at k+1 since at k, answer is known as 0.
+				A.set_at(i, j, A.at(i, j) - factor * A.at(k, j));
 		}
 	//back substitution
-	//x[n - 1] = A.at(n - 1, m - 1) / A.at(n - 1, m - 2);
-	for (int i = n - 1; i >= 0; i--)                //back-substitution
-	{                        //x is an array whose values correspond to the values of x,y,z..
-		x[i] = A.at(i, m-2);                //make the variable to be calculated equal to the rhs of the last equation
-		for (int j = i + 1; j <= n; j++)
-			if (j != i)           //then subtract all the lhs values except the coefficient of the variable whose value                                   is being calculated
-				x[i] = x[i] - A.at(i-1, j-1) * x[j];
-		x[i] = x[i] / A.at(i-1, i-1);            //now finally divide the rhs by the coefficient of the variable to be calculated
+	for (int i = n - 1; i >= 0; i--)                
+	{                       
+		x[i] = -(A.at(i, m-1));                
+		for (int j = i ; j <n; j++)
+			if (j != i)          
+				x[i] = x[i] - A.at(i, j) * x[j];
+		x[i] = x[i] / A.at(i, i);
 	}
-	return A;
-	//return Matrix(1, n, x);
+	return Matrix(n,1,x);
 }
 

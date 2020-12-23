@@ -8,17 +8,20 @@ using namespace std;
 
 int main()
 {
-    //double temp[20] = { 1, 1, -3, 1, 2, -5, 3, -4, 1, 0, 1, 2, 2, -1, 1, 1, 2, 6, 2, 12};
-    double temp[12] = { 1, 2, 3, 6, 4, 5, 6, 7, 8, 9, 10, 12 };
-    //Matrix tt(1, 3, t); //always pass list of rows, not columns.
+    double temp[20] = { 1, 1, -3, 1, -2, -3, 3, -4, 1, 0, 1, 0, 2, -1, -1, 1, 2, 0, 0, -12};
+    //double temp[12] = { 1,1,1,-6,1,2,-1,-2,2,-0.5,1,-4 };
+    double t[3] = { 1, 2, 3 };
+    Matrix tt(3, 1, t); //always pass list of rows, not columns.
     //Matrix x(3, 4, temp);
     //cout << x;
     //cout << " and the b matrix is" << endl;
     //cout << tt; 
     //Linear_system A(3, 3, x, tt);
-    Linear_system B(3, 4, temp);
+    Linear_system B(4, 5, temp);
     Matrix x = B.solve();
     cout << x;
+    //cout << tt;
+  
     int ss;
     cin >> ss;
     return 0;
