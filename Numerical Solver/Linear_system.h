@@ -19,6 +19,7 @@ public:
 	~Linear_system();
 	
 	Matrix solve();
+	Matrix solve_iteratively(double initials [], const int & n_iter);
 	bool is_valid_solution() { return valid_solution;}
 
 };
