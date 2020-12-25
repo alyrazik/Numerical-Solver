@@ -6,10 +6,14 @@ using namespace std;
 
 int main()
 {
-    double temp[20] = { 1, 1, -3, 1, -2, -3, 3, -4, 1, 0, 1, 0, 2, -1, -1, 1, 2, 0, 0, -12};
-    double t[3] = { 1, 2, 3 };
+    //double temp[20] = { 1, 1, -3, 1, -2, -3, 3, -4, 1, 0, 1, 0, 2, -1, -1, 1, 2, 0, 0, -12};
+    //double t[3] = { 1, 2, 3 };
     double as [16] = { 1, 1, -3, 1, -3, 3, -4, 1, 1, 0, 2, -1, 1, 2, 0, 0 };
     double bs [4] = { -2, 0, -1, -12 };
+    //double as[9] = { 1, 2, 1, 1, 1, -1, 1, 1, 1 }; // sol is 1, 2, 3
+    //double bs[3] = { -8, 0, -6 };
+    //double as[16] = { 1, 1,1,1, 1, -2, 0.5, 1, 2, -1, 3, 0.5, 1, 1, -1, -1 }; //sol is 1, 2, 3, 4
+    //double bs[4] = { -10, -2.5, -11, 4 };
     Matrix A(4, 4, as);
     Matrix b(4, 1, bs);
     Matrix out = A.augment(b); //don't forget to multiply with -1 to the b elements.
