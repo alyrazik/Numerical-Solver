@@ -141,12 +141,14 @@
   <ItemGroup>
     <ClCompile Include="Linear_system.cpp" />
     <ClCompile Include="Matrix.cpp" />
+    <ClCompile Include="Newton_interpolator.cpp" />
     <ClCompile Include="Numerical Solver.cpp" />
     <ClCompile Include="Source.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Linear_system.h" />
     <ClInclude Include="Matrix.h" />
+    <ClInclude Include="Newton_interpolator.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
