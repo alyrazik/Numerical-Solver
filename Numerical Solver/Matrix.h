@@ -8,7 +8,9 @@ private:
 	double* array;
 public:
 	Matrix(const int& n, const int& m);
+	Matrix();
 	Matrix(const Matrix& m2);
+	void operator=(const Matrix& m2);
 	Matrix(const int& n, const int& m, const double a[]);
 	~Matrix();
 	int n_rows() const;

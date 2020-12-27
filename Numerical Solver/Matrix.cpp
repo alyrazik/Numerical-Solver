@@ -8,11 +8,28 @@ Matrix::Matrix(const int& x, const int& y)
 {
 }
 
+Matrix::Matrix()
+
+{
+    n = 0;
+    m = 0;
+    array = { 0 };
+}
+
 Matrix::Matrix(const Matrix& m2) //copy constructor is needed. One method returns a Matrix type and one variable is a pointer.
 {
     n = m2.n;
     m = m2.m;
     array = new double[n*m];
+    for (int i = 0; i < n * m; i++)
+        array[i] = m2.array[i];
+}
+
+void Matrix::operator= (const Matrix& m2)
+{
+    n = m2.n;
+    m = m2.m;
+    array = new double[n * m];
     for (int i = 0; i < n * m; i++)
         array[i] = m2.array[i];
 }

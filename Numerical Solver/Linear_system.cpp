@@ -84,7 +84,6 @@ Matrix Linear_system::solve()
 		{
 			double factor = A.at(L[i], k) / A.at(L[k], k);
 			for (int j = k; j < m; j++) //for all elements in the equation
-				//m+1 since our A matrix is augmented, we start at k+1 since at k, answer is known as 0.
 				A.set_at(L[i], j, A.at(L[i], j) - factor * A.at(L[k], j));
 		}
 	}
@@ -106,7 +105,7 @@ Matrix Linear_system::solve()
 	valid_solution = (diagonal > ILL_CONDITIONING);
 
 	return Matrix(n, 1, x);
-	//return A;
+	
 }
 
 Matrix Linear_system::solve_iteratively(double initials[], const int& n_iter) const
