@@ -13,8 +13,6 @@ using namespace std;
 
 #include "gnuplot_i.hpp"
 
-
-
 //Normalization functions >>> Used for regression
 
 Matrix norm_x(const Matrix x, const int n)
@@ -59,6 +57,8 @@ double* norm_y(const double y[], const int n) {
 
 int regress_line() {
 	int i, n, m;
+	// Reading training data file
+
 	ifstream  trainData;
 	try {
 		trainData.open("2_a_dataset_1.csv");
@@ -68,6 +68,7 @@ int regress_line() {
 		cerr << cstr << '\n';
 		exit(1);
 	}
+
 	string line;
 	vector<vector<string> > parsedCsv;
 	while (getline(trainData, line))
@@ -109,20 +110,66 @@ int regress_line() {
 		cout << " + (" << coeff.at(idx, 0) << ")" << "x^" << idx;
 	cout << "\n";
 
-
+	// Running Prediction on training data
 	double *y_pred = new double[n];
 	for (i = 0; i < n; i++)
 		y_pred[i] = polyRegress.predict(x[i], coeff, m);
 
+	cout << "\n Dataset 2_a_dataset_1.csv \n" << endl;
 	cout << "\n Predictions: \n" << endl;
 	cout << "\nx   y_pred    y" << endl;
 	cout << "=================" << endl;
+
 
 	for (i = 0; i < n; i++) {
 		cout << x[i] << " " << y_pred[i] << " " << y[i] << endl;
 	}
 
+	// Reading test data
+	ifstream  testData;
 
+	testData.open("2_a_dataset_2.csv");
+	cout << "Opened file: 2_a_dataset_2.csv";
+
+
+	line = "";
+	vector<vector<string> > parsedCsv_2;
+	while (getline(testData, line))
+	{
+		stringstream lineStream(line);
+		string cell;
+		vector<string> parsedRow;
+		while (getline(lineStream, cell, ','))
+		{
+			parsedRow.push_back(cell);
+		}
+
+		parsedCsv_2.push_back(parsedRow);
+	}
+	n = parsedCsv_2.size() - 1;
+	double *x_test = new double[n];
+	double *y_test = new double[n];
+
+	for (size_t i = 1; i <= n; ++i) // start at i = 1 to skip header line
+	{
+		x_test[i - 1] = stod(parsedCsv_2[i][0]);
+		y_test[i - 1] = stod(parsedCsv_2[i][1]);
+	}
+
+	// Running Prediction on testing data
+	double *y_test_pred = new double[n];
+	for (i = 0; i < n; i++)
+		y_test_pred[i] = polyRegress.predict(x_test[i], coeff, m);
+
+	cout << "\n Dataset 2_a_dataset_2.csv \n" << endl;
+	cout << "\n Predictions: \n" << endl;
+	cout << "\nx   y_pred    y" << endl;
+	cout << "=================" << endl;
+
+
+	for (i = 0; i < n; i++) {
+		cout << x_test[i] << " " << y_test_pred[i] << " " << y_test[i] << endl;
+	}
 
 	int ss;
 	cin >> ss;
@@ -235,18 +282,20 @@ void interpolate() {
 	double answer2 = s.interpolate(5);
 	cout << "answer using splines is: " << answer2;
 }
+
+
 int main()
 {
-	
+
 	int number = 0;
 	cout << "Chose what do you want to do: \n \t1: Single variable Polynomial Regression. \n\t2: 2D Ploynomial Regression. \n\t3: Interpolation. \n";
 	cin >> number;
-	
+
 	if (number == 1)
 	{
 		cout << "Linear Regression" << endl;
 		int out = regress_line();
-		
+
 	}
 	else if (number == 2) {
 		cout << "2D Ploynomial Regression" << endl;
@@ -265,5 +314,4 @@ int main()
 
 
 }
-
 
