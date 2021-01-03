@@ -55,19 +55,14 @@ double* norm_y(const double y[], const int n) {
 	return y_norm;
 }
 
-int regress_line() {
-	int i, n, m;
+void regress_line(string filename, int m, int s) {
+	int i, n;
 	// Reading training data file
 
 	ifstream  trainData;
-	try {
-		trainData.open("2_a_dataset_1.csv");
-		cout << "Opened file: 2_a_dataset_1.csv";
-	}
-	catch (const char* cstr) {
-		cerr << cstr << '\n';
-		exit(1);
-	}
+	trainData.open(filename);
+	cout << "Opened file: " << filename;
+
 
 	string line;
 	vector<vector<string> > parsedCsv;
@@ -93,14 +88,16 @@ int regress_line() {
 		y[i - 1] = stod(parsedCsv[i][1]);
 	}
 
-	cout << "\nWhat degree of Polynomial do you want to use for the fit?\n";
-	cin >> m;
-
-	univar_regressor polyRegress = univar_regressor(x, y, m);
-	Matrix coeff = polyRegress.fit(x, y, n, m);
 
 
-	//cout <<"system is "<< S.is_valid_solution();
+	univar_regressor polyRegress = univar_regressor(x, y, m, s);
+	Matrix coeff = polyRegress.fit(x, y, n, m, s);
+
+	bool valid_sol = polyRegress.is_valid_solution();
+	if (valid_sol)
+		cout << "System has valid Solution" << endl;
+	else
+		cout << "System is ill conditioned" << endl;
 
 	cout << "\nThe values of the solution coefficients are:\n";
 	for (int idx = 0; idx <= m; idx++)
@@ -125,55 +122,6 @@ int regress_line() {
 		cout << x[i] << " " << y_pred[i] << " " << y[i] << endl;
 	}
 
-	// Reading test data
-	ifstream  testData;
-
-	testData.open("2_a_dataset_2.csv");
-	cout << "Opened file: 2_a_dataset_2.csv";
-
-
-	line = "";
-	vector<vector<string> > parsedCsv_2;
-	while (getline(testData, line))
-	{
-		stringstream lineStream(line);
-		string cell;
-		vector<string> parsedRow;
-		while (getline(lineStream, cell, ','))
-		{
-			parsedRow.push_back(cell);
-		}
-
-		parsedCsv_2.push_back(parsedRow);
-	}
-	n = parsedCsv_2.size() - 1;
-	double *x_test = new double[n];
-	double *y_test = new double[n];
-
-	for (size_t i = 1; i <= n; ++i) // start at i = 1 to skip header line
-	{
-		x_test[i - 1] = stod(parsedCsv_2[i][0]);
-		y_test[i - 1] = stod(parsedCsv_2[i][1]);
-	}
-
-	// Running Prediction on testing data
-	double *y_test_pred = new double[n];
-	for (i = 0; i < n; i++)
-		y_test_pred[i] = polyRegress.predict(x_test[i], coeff, m);
-
-	cout << "\n Dataset 2_a_dataset_2.csv \n" << endl;
-	cout << "\n Predictions: \n" << endl;
-	cout << "\nx   y_pred    y" << endl;
-	cout << "=================" << endl;
-
-
-	for (i = 0; i < n; i++) {
-		cout << x_test[i] << " " << y_test_pred[i] << " " << y_test[i] << endl;
-	}
-
-	int ss;
-	cin >> ss;
-	return 0;
 }
 
 int regress_2d() {
@@ -265,22 +213,55 @@ int regress_2d() {
 }
 
 
-void interpolate() {
-	double* x = new double[4];
-	x[0] = 3; x[1] = 4.5; x[2] = 7; x[3] = 9;
-	double* y = new double[4];
-	y[0] = 2.5; y[1] = 1.0; y[2] = 2.5; y[3] = 0.5;
-	Newton_interpolator n(x, y, 4);
-	n.fit();
-	double answer = n.interpolate(5);
+void interpolate(string filename) {
+
+	//Read input file:
+
+	int i, n;
+	// Reading training data file
+
+	ifstream  trainData;
+	trainData.open(filename);
+	cout << "Opened file: " << filename;
+
+
+	string line;
+	vector<vector<string> > parsedCsv;
+	while (getline(trainData, line))
+	{
+		stringstream lineStream(line);
+		string cell;
+		vector<string> parsedRow;
+		while (getline(lineStream, cell, ','))
+		{
+			parsedRow.push_back(cell);
+		}
+
+		parsedCsv.push_back(parsedRow);
+	}
+	n = parsedCsv.size() - 1;
+	double *x = new double[n];
+	double *y = new double[n];
+
+	for (size_t i = 1; i <= n; ++i) // start at i = 1 to skip header line
+	{
+		x[i - 1] = stod(parsedCsv[i][0]);
+		y[i - 1] = stod(parsedCsv[i][1]);
+	}
+
+	cout << "\nNewton Interpolation" << endl;
+	Newton_interpolator ni(x, y, 4);
+	ni.fit();
+	double answer = ni.interpolate(5);
 	cout << "answer: " << answer;
 
 
 	// spline interpolation:
+	cout << "\nSpline Interpolation: " << endl;
 	Spline_interpolator s(x, y, 4);
 	s.fit();
 	double answer2 = s.interpolate(5);
-	cout << "answer using splines is: " << answer2;
+	cout << "\nanswer using splines is: " << answer2;
 }
 
 
@@ -293,8 +274,27 @@ int main()
 
 	if (number == 1)
 	{
+		int m;
 		cout << "Linear Regression" << endl;
-		int out = regress_line();
+		cout << "\nWhat degree of Polynomial do you want to use for the fit?\n";
+		cin >> m;
+
+		cout << "\n Chose to Sove using: \n\t1.Gauss Scaled Elimination. \n\t2.Iterative Gauss-Siedel\n";
+		int s;
+		cin >> s;
+
+		cout << "===========================" << endl;
+			cout << "\n\nUsing First Dataset:" << endl;
+			cout << "===========================" << endl;
+
+			regress_line("2_a_dataset_1.csv", m, s);
+
+			cout << "\n===========================" << endl;
+			cout << "\n\nUsing Second Dataset:" << endl;
+			cout << "===========================" << endl;
+
+			regress_line("2_a_dataset_2.csv", m, s);
+	
 
 	}
 	else if (number == 2) {
@@ -303,7 +303,19 @@ int main()
 	}
 	else if (number == 3) {
 		cout << "Interpolation" << endl;
-		interpolate();
+
+		cout << "\n===========================" << endl;
+		cout << "\n\nUsing First Dataset:" << endl;
+		cout << "===========================" << endl;
+
+		interpolate("3_dataset_1.csv");
+
+		cout << "===========================" << endl;
+		cout << "\n\nUsing Second Dataset:" << endl;
+		cout << "===========================" << endl;
+		
+		interpolate("3_dataset_2.csv");
+
 	}
 	else {
 		cout << "Wrong Choice !" << endl;

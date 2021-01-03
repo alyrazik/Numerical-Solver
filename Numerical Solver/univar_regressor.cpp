@@ -9,11 +9,12 @@ using namespace std;
 #include "Matrix.h"
 
 
-univar_regressor::univar_regressor(const double x[], const double y[], const int m)
+univar_regressor::univar_regressor(const double x[], const double y[], const int m, const int s)
 	:n(sizeof(x)+1)
 	, m(m)
 	, x(new double [n])
 	, y(new double [n])
+	, valid_solution(false)
 {
 }
 
@@ -23,7 +24,7 @@ univar_regressor::~univar_regressor()
 }
 
 
-Matrix univar_regressor::fit(const double x[], const double y[], const int n, const int m) {
+Matrix univar_regressor::fit(const double x[], const double y[], const int n, const int m, const int s) {
 
 	int i, j;
 	double *as = new(double[2 * m + 1]);              //Array that will store the values of sigma(xi),sigma(xi^2),sigma(xi^3)....sigma(xi^2n)
@@ -58,9 +59,23 @@ Matrix univar_regressor::fit(const double x[], const double y[], const int n, co
 	cout << out << endl;
 	
 	Linear_system S(A, b);
-	Matrix sol = S.solve();
+	if (s == 1) {
+		Matrix sol = S.solve();
+		valid_solution = S.is_valid_solution();
+		return sol;
+	}
+	else if (s == 2) {
+		//In case of Gauss-Siedel is selected:
+		double* arr = new double[m+1];
+		//initialization
+		for (int k = 0; k < m+1; k++)
+			arr[k] = 0;
+		//Assume number of iterations is 20
+		Matrix sol = S.solve_iteratively(arr, 20);
+		return sol;
+	}
 
-	return sol;
+	
 }
 
 double univar_regressor::predict(const double xi, const Matrix coeff, const int m)

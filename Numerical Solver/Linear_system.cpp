@@ -123,7 +123,7 @@ Matrix Linear_system::solve_iteratively(double initials[], const int& n_iter) co
 		{
 			for (int j = 0; j < n; j++)
 				if (i != j)
-					x[i] += -A.at(i, j) * previous[j];
+					x[i] += A.at(i, j) * previous[j];
 			x[i] = x[i] + (-A.at(i, m - 1));
 			x[i] = x[i] / A.at(i, i);
 		}
