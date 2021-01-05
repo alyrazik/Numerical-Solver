@@ -522,25 +522,40 @@ void interpolate(string filename) {
 	}
 
 	cout << "\nNewton Interpolation" << endl;
+	//Define interpolation
 	Newton_interpolator ni(x, y, n);
-	ni.fit();
+	//Fit to get coefficients
+	double* ni_coeff = new double[n];
+	ni_coeff = ni.fit();
+	//Output to file
+	string coeff_filename = "coeff_" + filename;
+	ofstream outfile;
+	outfile.open(coeff_filename);
+	for (i = 0; i < n; i++)
+		outfile << ni_coeff[i] << endl;
+	outfile.close();
 	// Interpolating 2 points and 4 points
 	double* ip2 = new double[2];
 	double* ip4 = new double[4];
 
 	for (int p=1; p<3; p++)
-		ip2[p] = ni.interpolate(p);
+		ip2[p-1] = ni.interpolate(p);
 	for (int p = 2; p < 6; p++)
-		ip4[p] = ni.interpolate(p);
+		ip4[p-2] = ni.interpolate(p);
+
+	cout << "Interpolating new points 1.0 , 2.0" << endl;
+	cout << "Out: " << ip2[0] << " " << ip2[1] << endl;
+	cout << "Interpolating new points 2.0 , 3.0, 4.0, 5.0" << endl;
+	cout << "Out: " << ip4[0] << " " << ip4[1] << " " << ip4[2] << " " << ip4[3] << endl;
 	//cout << "\nanswer: " << answer;
 
 
 	// spline interpolation:
-	cout << "\nSpline Interpolation: " << endl;
+	//cout << "\nSpline Interpolation: " << endl;
 	Spline_interpolator s(x, y, n);
 	s.fit();
 	double answer2 = s.interpolate(5);
-	cout << "\nanswer: " << answer2;
+	//cout << "\nanswer: " << answer2 << endl;
 }
 
 

@@ -13,6 +13,6 @@ public:
 	Newton_interpolator(double* x, double* y, int size);
 	~Newton_interpolator() { delete x, y, coefficients; }
 	double interpolate(const double& x) ;
-	void fit() const;
+	double* fit() const;
 };
 

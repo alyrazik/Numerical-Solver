@@ -33,13 +33,14 @@ double Newton_interpolator::interpolate(const double& x_new)
 	return answer;
 }
 
-void Newton_interpolator::fit() const
+double* Newton_interpolator::fit() const
 {
 	for (int i = 1; i < n_points; i++)
 	{
 		coefficients[i] = finite_difference(0, i);
 	}
 	coefficients[0] = y[0];
-	for (int i = 0; i < n_points; i++)
-		std::cout << coefficients[i] << "\n";
+
+
+	return coefficients;
 }
