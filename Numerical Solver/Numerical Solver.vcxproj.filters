@@ -59,5 +59,11 @@
     <ClInclude Include="Spline_Interpolator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="tuple.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="gnuplot_i.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
