@@ -15,23 +15,8 @@ using namespace std;
 
 #include "gnuplot_i.hpp" //Gnuplot class handles POSIX-Pipe-communikation with Gnuplot
 
-#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__TOS_WIN__)
-#include <conio.h>   //for getch(), needed in wait_for_key()
-#include <windows.h> //for Sleep()
-void sleep(int i)
-{
-	Sleep(i * 1000);
-}
-#endif
 
-
-//#define SLEEP_LGTH 2  // sleep time in seconds
-//#define NPOINTS    50 // length of array
-
-void wait_for_key(); // Programm halts until keypress
-
-
-//Normalization functions >>> Used for regression
+//Normalization functions >>> Used for normalizing housing data 
 
 Matrix norm_x(const Matrix x, const int n)
 {
@@ -39,21 +24,21 @@ Matrix norm_x(const Matrix x, const int n)
 	Matrix x_tmp = Matrix(3, n);
 	for (i = 0; i < n; i++)
 		x_tmp.set_at(0, i, 1);
-	//for (i = 1; i < 3; i++)
-	//{
-	//	double x_min = x.at(i, 0);
-	//	double x_max = x.at(i, 0);
-	//	for (int j = 1; j < n; j++) {
-	//		if (x.at(i, j) < x_min) {
-	//			x_min = x.at(i, j);
-	//		}
-	//		if (x.at(i, j) > x_max) {
-	//			x_max = x.at(i, j);
-	//		}
-	//	}
-	//	for (int j = 0; j < n; j++)
-	//		x_norm.set_at(i, j, (x.at(i, j) - x_min) / (x_max - x_min));
-	//}
+	for (i = 1; i < 3; i++)
+	{
+		double x_min = x.at(i, 0);
+		double x_max = x.at(i, 0);
+		for (int j = 1; j < n; j++) {
+			if (x.at(i, j) < x_min) {
+				x_min = x.at(i, j);
+			}
+			if (x.at(i, j) > x_max) {
+				x_max = x.at(i, j);
+			}
+		}
+		for (int j = 0; j < n; j++)
+			x_tmp.set_at(i, j, (x.at(i, j) - x_min) / (x_max - x_min));
+	}
 
 	return x_tmp;
 }
@@ -73,7 +58,17 @@ double* norm_y(const double y[], const int n) {
 	return y_norm;
 }
 
+double denorm_y(const double y_norm, const double y_min, const double y_max) {
+	double y_denorm = y_norm * (y_max - y_min) + y_min;
+	return y_denorm;
+}
 
+double calc_mse(const double y[], const double y_pred[], const int n) {
+	double mse = 0;
+	for (int i = 0; i < n; i++)
+		mse = mse + pow((y[i] - y_pred[i]),2) /n;
+	return mse;
+}
 void doSomePlotting(vector<double> x, vector<double> y)
 {
 	// if path-variable for gnuplot is not set, do it with:
@@ -386,7 +381,7 @@ void regress_line(string filename, int m, int s) {
 	
 }
 
-int regress_2d() {
+int regress_2d(const int x1, const int x2) {  //Accepts the indexes of the needed two columns for regression
 	int i, j, n, m;
 	m = 2;    // two dimensional input x: x_1, x_2
 	ifstream  trainData;
@@ -414,33 +409,29 @@ int regress_2d() {
 	}
 	n = parsedCsv.size() - 1;
 
-
-	Matrix x = Matrix(m + 1, n);
+	Matrix x = Matrix(3, n);
 	double *y = new double[n];
 
 	for (i = 1; i <= n; ++i) // start at i = 1 to skip header line
 	{
 		x.set_at(0, i - 1, 1);        // put 1's in x0 for the algorithm to work, data points will be stored in x1, x2
-		for (j = 1; j < m + 1; j++)
-			x.set_at(j, i - 1, stod(parsedCsv[i][j - 1]));
+		x.set_at(1, i - 1, stod(parsedCsv[i][x1]));
+		x.set_at(2, i - 1, stod(parsedCsv[i][x2]));
 		y[i - 1] = stod(parsedCsv[i][4]);
 	}
 
-	//Matrix x_norm = Matrix(m + 1, n);
-	double *y_norm = new double[n];
 
-	//x_norm = norm_x(x, n);
+	// Traget column "Price" is in a very large scale
+	//Normalizing "Price"
+	double *y_norm = new double[n];
 	y_norm = norm_y(y, n);
 
-	//for (i = 0; i < 20; i++)
-	//	cout << "\n" << y_norm[i];
+	Matrix x_norm(m + 1, m + 1);
+	x_norm = norm_x(x, n);
 
 
-	multivar_regressor polyRegress2D = multivar_regressor(x, y_norm, n, m);
-	Matrix coeff = polyRegress2D.fit(x, y_norm, n, m);
-
-
-	////cout <<"system is "<< S.is_valid_solution();
+	multivar_regressor polyRegress2D = multivar_regressor(x_norm, y_norm, n, m);
+	Matrix coeff = polyRegress2D.fit(x_norm, y_norm, n, m);
 
 	cout << "\nThe values of the solution coefficients are:\n";
 	for (int idx = 0; idx <= m; idx++)
@@ -450,27 +441,46 @@ int regress_2d() {
 		cout << " + (" << coeff.at(idx, 0) << ")" << "x_" << idx;
 	cout << "\n";
 
+	//Getting Min, Max price for de-normalizing prediction
+	double y_min = y[0];
+	double y_max = y[0];
+	for (i = 0; i < n; i++) {
+		if (y[i] < y_min)
+			y_min = y[i];
+		if (y[i] > y_max)
+			y_max = y[i];
+	}
+
 	// Prediction
 	double* xi = new double[3];
 	double *y_pred = new double[n];
+	double* y_norm_pred = new double[n];
 	for (i = 0; i < n; i++)
+	{
 		for (j = 0; j < 3; j++)
-			xi[j] = x.at(j, i);
-
-	y_pred[i] = polyRegress2D.predict(xi, coeff, m);
-
-	cout << "\n Predictions: \n" << endl;
-	cout << "\nx1     x2      y_pred    y" << endl;
-	cout << "============================" << endl;
-
-	for (i = 0; i < 11; i++) {
-		cout << x.at(1, i) << "       " << x.at(2, i) << "    " << y_pred[i] << " " << y[i] << endl;
+			xi[j] = x_norm.at(j, i);
+		y_norm_pred[i] = polyRegress2D.predict(xi, coeff, m);
 	}
 
+	for (i = 0; i < n; i++)
+	{
+		y_pred[i] = denorm_y(y_norm_pred[i], y_min, y_max);
+	}
 
+	double mse = calc_mse(y_norm, y_norm_pred,n);
+	cout << "\n\n=========================================" << endl;
+	cout << "Mean Square Error=" << mse << endl;
+	cout << "\n\n=========================================" << endl;
 
-	int ss;
-	cin >> ss;
+	cout << "\n Sample Predictions: \n" << endl;
+	cout << "\nx1 x2  Pred_Price Price" << endl;
+	cout << "=========================================" << endl;
+
+	for (i = 0; i < 11; i++) {
+		cout << x.at(1, i) << "  " << x.at(2, i) << "       " << y_pred[i] << "     " << y[i] << endl;
+	}
+	cout << "=========================================" << endl;
+	cout << "=========================================" << endl;
 	return 0;
 }
 
@@ -563,7 +573,20 @@ int main()
 	}
 	else if (number == 2) {
 		cout << "2D Ploynomial Regression" << endl;
-		int out = regress_2d();
+		cout << "///////////////////////////////////////" << endl;
+		cout << "\nUsing \"bedrooms\" and \"bathrooms\"" << endl;
+		int out = regress_2d(0, 1);
+		cout << "\nUsing \"bedrooms\" and \"stories\"" << endl;
+		out = regress_2d(0, 2);
+		cout << "\nUsing \"bedrooms\" and \"lotsize\"" << endl;
+		out = regress_2d(0, 3);
+		cout << "\nUsing \"bathrooms\" and \"stories\"" << endl;
+		out = regress_2d(1, 2);
+		cout << "\nUsing \"bathrooms\" and \"lotsize\"" << endl;
+		out = regress_2d(1, 3);
+		cout << "\nUsing \"stories\" and \"lotsize\"" << endl;
+		out = regress_2d(2, 3);
+
 	}
 	else if (number == 3) {
 		cout << "Interpolation" << endl;

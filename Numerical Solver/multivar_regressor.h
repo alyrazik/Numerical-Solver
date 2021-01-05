@@ -6,7 +6,8 @@ class multivar_regressor
 {
 private:
 	int n, m;
-	double **x, *y;
+	double *y;
+	Matrix  x;
 
 public:
 	multivar_regressor(const Matrix x, const double y[], const int n,const int m);

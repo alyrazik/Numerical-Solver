@@ -155,7 +155,6 @@
     <ClInclude Include="multivar_regressor.h" />
     <ClInclude Include="Newton_interpolator.h" />
     <ClInclude Include="Spline_Interpolator.h" />
-    <ClInclude Include="tuple.hpp" />
     <ClInclude Include="univar_regressor.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

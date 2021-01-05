@@ -9,10 +9,10 @@ using namespace std;
 #include "Matrix.h"
 
 multivar_regressor::multivar_regressor(const Matrix x, const double y[], const int n, const int m)
-	//:n(n)
-	//, m(m)
-	//, x(new double* [n])
-	//, y(new double[n]) 
+	:n(n)
+	, m(m)
+	, x(Matrix(m+1, m+1))
+	, y(new double[n]) 
 {
 }
 
@@ -39,7 +39,7 @@ Matrix multivar_regressor::fit(const Matrix x, const double y[], const int n, co
 			A.set_at(j-1,i-1, sum);
 		}
 		sum = 0;
-		for (int l = 0; l <= n; l++)
+		for (int l = 0; l < n; l++)
 			sum = sum + y[l] * x.at(i-1,l);
 		b.set_at(i-1,0, sum);
 
