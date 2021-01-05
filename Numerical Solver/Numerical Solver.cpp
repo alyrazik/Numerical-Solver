@@ -522,18 +522,25 @@ void interpolate(string filename) {
 	}
 
 	cout << "\nNewton Interpolation" << endl;
-	Newton_interpolator ni(x, y, 4);
+	Newton_interpolator ni(x, y, n);
 	ni.fit();
-	double answer = ni.interpolate(5);
-	cout << "answer: " << answer;
+	// Interpolating 2 points and 4 points
+	double* ip2 = new double[2];
+	double* ip4 = new double[4];
+
+	for (int p=1; p<3; p++)
+		ip2[p] = ni.interpolate(p);
+	for (int p = 2; p < 6; p++)
+		ip4[p] = ni.interpolate(p);
+	//cout << "\nanswer: " << answer;
 
 
 	// spline interpolation:
 	cout << "\nSpline Interpolation: " << endl;
-	Spline_interpolator s(x, y, 4);
+	Spline_interpolator s(x, y, n);
 	s.fit();
 	double answer2 = s.interpolate(5);
-	cout << "\nanswer using splines is: " << answer2;
+	cout << "\nanswer: " << answer2;
 }
 
 
