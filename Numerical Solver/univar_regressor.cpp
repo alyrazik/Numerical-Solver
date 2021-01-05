@@ -27,12 +27,12 @@ univar_regressor::~univar_regressor()
 Matrix univar_regressor::fit(const double x[], const double y[], const int n, const int m, const int s) {
 
 	int i, j;
-	double *as = new(double[2 * m + 1]);              //Array that will store the values of sigma(xi),sigma(xi^2),sigma(xi^3)....sigma(xi^2n)
+	double *as = new(double[2 * m + 1]);              
 	for (i = 0; i < 2 * m + 1; i++)
 	{
 		as[i] = 0;
 		for (j = 0; j < n; j++)
-			as[i] = as[i] + pow(x[j], i);        //consecutive positions of the array will store N,sigma(xi),sigma(xi^2),sigma(xi^3)....sigma(xi^2n)
+			as[i] = as[i] + pow(x[j], i);        
 	}
 	double *C = new double[(m+1)*(m+1)];        //the final coefficients array
 	int cntr = 0;
@@ -44,12 +44,12 @@ Matrix univar_regressor::fit(const double x[], const double y[], const int n, co
 		}
 			
 
-	double* bs = new double[m + 1];                    //Array to store the values of sigma(yi),sigma(xi*yi),sigma(xi^2*yi)...sigma(xi^n*yi)
+	double* bs = new double[m + 1];                   
 	for (i = 0; i < m + 1; i++)
 	{
 		bs[i] = 0;
 		for (j = 0; j < n; j++)
-			bs[i] = bs[i] + pow(x[j], i)*y[j];        //consecutive positions will store sigma(yi),sigma(xi*yi),sigma(xi^2*yi)...sigma(xi^n*yi)
+			bs[i] = bs[i] + pow(x[j], i)*y[j];       
 	}
 
 	Matrix A(m + 1, m + 1, C);
@@ -70,8 +70,8 @@ Matrix univar_regressor::fit(const double x[], const double y[], const int n, co
 		//initialization
 		for (int k = 0; k < m+1; k++)
 			arr[k] = 0;
-		//Assume number of iterations is 20
-		Matrix sol = S.solve_iteratively(arr, 20);
+		//Assume number of iterations is 2
+		Matrix sol = S.solve_iteratively(arr, 2);
 		return sol;
 	}
 

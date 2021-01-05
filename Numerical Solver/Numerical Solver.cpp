@@ -469,7 +469,7 @@ int regress_2d(const int x1, const int x2) {  //Accepts the indexes of the neede
 
 	double mse = calc_mse(y_norm, y_norm_pred,n);
 	cout << "\n\n=========================================" << endl;
-	cout << "Mean Square Error=" << mse << endl;
+	cout << "Mean Square Error= " << mse << endl;
 	cout << "\n\n=========================================" << endl;
 
 	cout << "\n Sample Predictions: \n" << endl;
