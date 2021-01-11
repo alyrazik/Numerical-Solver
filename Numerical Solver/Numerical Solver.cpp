@@ -549,6 +549,21 @@ void interpolate(string filename) {
 	cout << "Out: " << ip4[0] << " " << ip4[1] << " " << ip4[2] << " " << ip4[3] << endl;
 	//cout << "\nanswer: " << answer;
 
+	std::vector<double> x_vec(x, x + n);
+	std::vector<double> y_vec(y, y + n);
+
+
+	//Formulate the equation with the coefficients
+	string eqn = "";
+	for (i = 0; i < n + 1; i++)
+		eqn = eqn + "+" + to_string(ni_coeff[i]) + "*(x**" + to_string(i) + ")";
+
+	//Use GNUPLOT
+	Gnuplot g1("lines");
+	g1.set_grid();
+	g1.plot_equation(eqn, "Fitted Line");  //plot the fitted line
+	//g1.set_style("points").plot_xy(x_vec, y_vec, "Original Points"); //plot the original points
+
 
 	// spline interpolation:
 	//cout << "\nSpline Interpolation: " << endl;
@@ -556,6 +571,9 @@ void interpolate(string filename) {
 	s.fit();
 	double answer2 = s.interpolate(5);
 	//cout << "\nanswer: " << answer2 << endl;
+
+
+
 }
 
 
