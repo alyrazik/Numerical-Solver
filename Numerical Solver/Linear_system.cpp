@@ -124,7 +124,7 @@ Matrix Linear_system::solve_iteratively(double initials[], const int& n_iter) co
 			for (int j = 0; j < n; j++)
 				if (i != j)
 					x[i] += -A.at(i, j) * previous[j];
-			x[i] = x[i] + (-A.at(i, m - 1));
+			x[i] = x[i] + (A.at(i, m - 1));
 			x[i] = x[i] / A.at(i, i);
 		}
 		for (int i = 0; i < n; i++)
@@ -137,4 +137,49 @@ Matrix Linear_system::solve_iteratively(double initials[], const int& n_iter) co
 	}
 
 	return Matrix(n, 1, previous);
+}
+//TOLERANCE = 0.01; 
+Matrix Linear_system::solve_until(double initials[], int& n_iter, float epsilon) const
+{
+
+	double* previous = new double[n];
+	for (int i = 0; i < n; i++)
+	{
+		//x[i] = initials[i];
+		previous[i] = initials[i];
+	}
+
+	float delta = 0; //delta is for the first unknown (x1)
+	int count = 0;
+	do
+	{
+
+		for (int i = 0; i < n; i++)
+		{
+			for (int j = 0; j < n; j++)
+				if (i != j)
+					x[i] += -A.at(i, j) * previous[j];
+			x[i] = x[i] + (A.at(i, m - 1));
+			x[i] = x[i] / A.at(i, i);
+		}
+		delta = abs(previous[0] - x[0]);
+		for (int i = 0; i < n; i++)
+		{
+			previous[i] = x[i];
+			x[i] = initials[i];
+		}
+
+		//std::cout << Matrix(n, 1, previous);
+		count++;
+	} while (delta > epsilon);
+
+	n_iter = count;
+
+	for (int i = 0; i < n; i++)
+	{
+		previous[i] = previous[i];
+	}
+
+	return Matrix(n, 1, previous);
+
 }

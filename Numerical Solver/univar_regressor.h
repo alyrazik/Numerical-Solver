@@ -11,7 +11,7 @@ private:
 
 
 public:
-	
+	int seidel_iterations;
 	univar_regressor(const double x[], const double y[], const int m, const int s);
 	~univar_regressor();
 

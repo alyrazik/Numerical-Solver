@@ -69,13 +69,11 @@ Matrix univar_regressor::fit(const double x[], const double y[], const int n, co
 		double* arr = new double[m+1];
 		//initialization
 		for (int k = 0; k < m+1; k++)
-			arr[k] = 0;
+			arr[k] = 0.1;
 		//Assume number of iterations is 2
-		Matrix sol = S.solve_iteratively(arr, 2);
+		Matrix sol = S.solve_until(arr, seidel_iterations, 0.01f);
 		return sol;
 	}
-
-	
 }
 
 double univar_regressor::predict(const double xi, const Matrix coeff, const int m)

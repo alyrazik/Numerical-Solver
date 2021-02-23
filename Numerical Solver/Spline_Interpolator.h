@@ -13,6 +13,10 @@ public:
 	double interpolate(const double& x_new);
 
 	void fit() ;
-	
+
+	Matrix get_coefficients() {
+		return solutions;
+	};
+
 };
 

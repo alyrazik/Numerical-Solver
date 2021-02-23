@@ -144,7 +144,6 @@
     <ClCompile Include="multivar_regressor.cpp" />
     <ClCompile Include="Newton_interpolator.cpp" />
     <ClCompile Include="Numerical Solver.cpp" />
-    <ClCompile Include="Source.cpp" />
     <ClCompile Include="Spline_Interpolator.cpp" />
     <ClCompile Include="univar_regressor.cpp" />
   </ItemGroup>
