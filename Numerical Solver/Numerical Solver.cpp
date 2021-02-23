@@ -69,7 +69,229 @@ double calc_mse(const double y[], const double y_pred[], const int n) {
 		mse = mse + pow((y[i] - y_pred[i]),2) /n;
 	return mse;
 }
+void doSomePlotting(vector<double> x, vector<double> y)
+{
+	// if path-variable for gnuplot is not set, do it with:
+// Gnuplot::set_GNUPlotPath("C:/program files/gnuplot/bin/");
 
+// set a special standard terminal for showonscreen (normally not needed),
+//   e.g. Mac users who want to use x11 instead of aqua terminal:
+// Gnuplot::set_terminal_std("x11");
+
+	cout << "*** example of gnuplot control through C++ ***" << endl << endl;
+
+	//
+	// Using the GnuplotException class
+	//
+	try
+	{
+		Gnuplot g1("lines");
+
+		//
+		// Slopes
+		//
+		//cout << "*** plotting slopes" << endl;
+		//g1.set_title("Slopes\\nNew Line");
+
+		//cout << "y = x" << endl;
+		//g1.plot_slope(1.0, 0.0, "y=x");
+
+		//cout << "y = 2*x" << endl;
+		//g1.plot_slope(2.0, 0.0, "y=2x");
+
+		//cout << "y = -x" << endl;
+		//g1.plot_slope(-1.0, 0.0, "y=-x");
+		//g1.unset_title();
+
+		////
+		//// Equations
+		////
+		//g1.reset_plot();
+		//cout << endl << endl << "*** various equations" << endl;
+
+		//cout << "y = sin(x)" << endl;
+		//g1.plot_equation("sin(x)", "sine");
+
+		//cout << "y = log(x)" << endl;
+		//g1.plot_equation("log(x)", "logarithm");
+
+		//cout << "y = sin(x) * cos(2*x)" << endl;
+		//g1.plot_equation("sin(x)*cos(2*x)", "sine product");
+
+		////
+		//// Styles
+		////
+		//g1.reset_plot();
+		//cout << endl << endl << "*** showing styles" << endl;
+
+		//cout << "sine in points" << endl;
+		//g1.set_pointsize(0.8).set_style("points");
+		//g1.plot_equation("sin(x)", "points");
+
+		//cout << "sine in impulses" << endl;
+		//g1.set_style("impulses");
+		//g1.plot_equation("sin(x)", "impulses");
+
+		//cout << "sine in steps" << endl;
+		//g1.set_style("steps");
+		//g1.plot_equation("sin(x)", "steps");
+
+		////
+		//// Save to ps
+		////
+		//g1.reset_all();
+		//cout << endl << endl << "*** save to ps " << endl;
+
+		//cout << "y = sin(x) saved to test_output.ps in working directory" << endl;
+		////      g1.savetops("test_output");
+		////g1.savetofigure("test_output.ps", "postscript color");
+		//g1.set_style("lines").set_samples(300).set_xrange(0, 5);
+		//g1.plot_equation("sin(12*x)*exp(-x)").plot_equation("exp(-x)");
+
+		//g1.showonscreen(); // window output
+
+
+		//
+		// User defined 1d, 2d and 3d point sets
+		//
+		//std::vector<double> x, y, y2, dy, z;
+		//int NPOINTS = 50;
+		//int SLEEP_LGTH = 2;
+		//for (unsigned int i = 0; i < NPOINTS; i++)  // fill double arrays x, y, z
+		//{
+		//	x.push_back((double)i);             // x[i] = i
+		//	y.push_back((double)i * (double)i); // y[i] = i^2
+		//	z.push_back(x[i] * y[i]);           // z[i] = x[i]*y[i] = i^3
+		//	dy.push_back((double)i * (double)i / (double)10); // dy[i] = i^2 / 10
+		//}
+		//y2.push_back(0.00);
+		//y2.push_back(0.78);
+		//y2.push_back(0.97);
+		//y2.push_back(0.43);
+		//y2.push_back(-0.44);
+		//y2.push_back(-0.98);
+		//y2.push_back(-0.77);
+		//y2.push_back(0.02);
+
+
+		//g1.reset_all();
+		//cout << endl << endl << "*** user-defined lists of doubles" << endl;
+		//g1.set_style("impulses").plot_x(y, "user-defined doubles");
+
+		//g1.reset_plot();
+		cout << endl << endl << "*** user-defined lists of points (x,y)" << endl;
+		g1.set_grid();
+		g1.set_style("points").plot_xy(x, y, "user-defined points 2d");
+
+		//g1.reset_plot();
+		//cout << endl << endl << "*** user-defined lists of points (x,y,z)" << endl;
+		//g1.unset_grid();
+		//g1.plot_xyz(x, y, z, "user-defined points 3d");
+
+		//g1.reset_plot();
+		//cout << endl << endl << "*** user-defined lists of points (x,y,dy)" << endl;
+		//g1.plot_xy_err(x, y, dy, "user-defined points 2d with errorbars");
+
+
+		////
+		//// Multiple output screens
+		////
+		//cout << endl << endl;
+		//cout << "*** multiple output windows" << endl;
+
+		//g1.reset_plot();
+		//g1.set_style("lines");
+		//cout << "window 1: sin(x)" << endl;
+		//g1.set_grid().set_samples(600).set_xrange(0, 300);
+		//g1.plot_equation("sin(x)+sin(x*1.1)");
+
+		//g1.set_xautoscale().replot();
+
+		//Gnuplot g2;
+		//cout << "window 2: user defined points" << endl;
+		//g2.plot_x(y2, "points");
+		//g2.set_smooth().plot_x(y2, "cspline");
+		//g2.set_smooth("bezier").plot_x(y2, "bezier");
+		//g2.unset_smooth();
+
+		//Gnuplot g3("lines");
+		//cout << "window 3: log(x)/x" << endl;
+		//g3.set_grid();
+		//g3.plot_equation("log(x)/x", "log(x)/x");
+
+		//Gnuplot g4("lines");
+		//cout << "window 4: splot x*x+y*y" << endl;
+		//g4.set_zrange(0, 100);
+		//g4.set_xlabel("x-axis").set_ylabel("y-axis").set_zlabel("z-axis");
+		//g4.plot_equation3d("x*x+y*y");
+
+		//Gnuplot g5("lines");
+		//cout << "window 5: splot with hidden3d" << endl;
+		//g5.set_isosamples(25).set_hidden3d();
+		//g5.plot_equation3d("x*y*y");
+
+		//Gnuplot g6("lines");
+		//cout << "window 6: splot with contour" << endl;
+		//g6.set_isosamples(60).set_contour();
+		//g6.unset_surface().plot_equation3d("sin(x)*sin(y)+4");
+
+		//g6.set_surface().replot();
+
+		//Gnuplot g7("lines");
+		//cout << "window 7: set_samples" << endl;
+		//g7.set_xrange(-30, 20).set_samples(40);
+		//g7.plot_equation("besj0(x)*0.12e1").plot_equation("(x**besj0(x))-2.5");
+
+		//g7.set_samples(400).replot();
+
+		//Gnuplot g8("filledcurves");
+		//cout << "window 8: filledcurves" << endl;
+		//g8.set_legend("outside right top").set_xrange(-5, 5);
+		//g8.plot_equation("x*x").plot_equation("-x*x+4");
+
+		////
+		//// Plot an image
+		////
+		//Gnuplot g9;
+		//cout << "window 9: plot_image" << endl;
+		//const int unsigned uiWidth = 255U;
+		//const int unsigned uiHeight = 255U;
+		//g9.set_xrange(0, uiWidth).set_yrange(0, uiHeight).set_cbrange(0, 255);
+		//g9.cmd("set palette gray");
+		//unsigned char ucPicBuf[uiWidth * uiHeight];
+		//// generate a greyscale image
+		//for (unsigned int uiIndex = 0; uiIndex < uiHeight * uiWidth; uiIndex++)
+		//{
+		//	ucPicBuf[uiIndex] = static_cast<unsigned char>(uiIndex % 255U);
+		//}
+		//g9.plot_image(ucPicBuf, uiWidth, uiHeight, "greyscale");
+
+		//g9.set_pointsize(0.6).unset_legend().plot_slope(0.8, 20);
+
+		//
+		// manual control
+		//
+		//cout << "echo \"plot x; pause =1\" | gnuplot ";
+		//Gnuplot g10;
+		//cout << "window 10: manual control" << endl;
+
+		////g10.cmd("set samples 400").cmd("plot abs(x)/2 ; pause -1"); // either with cmd()
+		//g10 << "plot sqrt(x)";
+		//g10.showonscreen();
+
+		//g10 << "replot sqrt(x)" << "replot sqrt(-x)";    // or with <<
+
+		//wait_for_key();
+	}
+	catch (GnuplotException ge)
+	{
+		cout << ge.what() << endl;
+	}
+
+
+	cout << endl << "*** end of gnuplot example" << endl;
+
+}
 
 
 void regress_line(string filename, int m, int s) {
@@ -111,8 +333,6 @@ void regress_line(string filename, int m, int s) {
 	Matrix coeff = polyRegress.fit(x, y, n, m, s);
 
 	bool valid_sol = polyRegress.is_valid_solution();
-	int num_iterations = polyRegress.seidel_iterations;
-
 	if (valid_sol)
 		cout << "System has valid Solution" << endl;
 	else
@@ -125,8 +345,6 @@ void regress_line(string filename, int m, int s) {
 	for (int idx = 0; idx <= m; idx++)
 		cout << " + (" << coeff.at(idx, 0) << ")" << "x^" << idx;
 	cout << "\n";
-	if (s == 2)
-		cout << "Gauss Seidel Iterations: " + num_iterations << endl;
 
 	// Running Prediction on training data
 	double *y_pred = new double[n];
@@ -208,7 +426,6 @@ int regress_2d(const int x1, const int x2) {  //Accepts the indexes of the neede
 	double *y_norm = new double[n];
 	y_norm = norm_y(y, n);
 
-	//Normalizing input features
 	Matrix x_norm(m + 1, m + 1);
 	x_norm = norm_x(x, n);
 
@@ -304,47 +521,54 @@ void interpolate(string filename) {
 		y[i - 1] = stod(parsedCsv[i][1]);
 	}
 
-	cout << "\nNewton Interpolation" << endl;
-	cout << "=======================" << endl;
+	cout << "\Spline Interpolation" << endl;
+
+
 
 	//Define interpolation
-	Newton_interpolator ni(x, y, n);
+	//Newton_interpolator ni(x, y, n);
+	Spline_interpolator ni(x, y, n);
 	//Fit to get coefficients
 	double* ni_coeff = new double[n];
-	ni_coeff = ni.fit();
+	ni.fit();
+	Matrix temp = ni.get_coefficients();
+	cout << "Coefficients: " << endl;
+	cout << temp;
+	cout << endl;
+	cout << "End" << endl;
 	//Output to file
-	string coeff_filename = "newton_coeff_" + filename;
+	string coeff_filename = "coeff_" + filename;
 	ofstream outfile;
 	outfile.open(coeff_filename);
-	for (i = 0; i < n; i++)
-		outfile << ni_coeff[i] << endl;
+	outfile << temp; 
+	//for (i = 0; i < n; i++)
+	//	outfile << ni_coeff[i] << endl;
 	outfile.close();
-
-
+	
 	//doubling the points x and y.
-	double* x_ = new double[2 * n - 1];
-	double* y_ = new double[2 * n - 1];
+	double* x_ =new double[2*n-1];
+	double* y_ = new double[2*n-1];
 	double* x__ = new double[(n + (n - 1)) + (2 * n - 2)];
 	double* y__ = new double[(n + (n - 1)) + (2 * n - 2)];
-	for (int i = 0; i < n + (n - 1); i++)
+	for (int i = 0; i < n+(n-1); i++)
 	{
 		if (i % 2 != 1)
 		{
-			x_[i] = x[i / 2];
-			y_[i] = y[i / 2];
+			x_[i] = x[i/2];
+			y_[i] = y[i/2];
 		}
 		else
 		{
-			x_[i] = (x[i / 2 + 1] + x[i / 2]) / 2.0;
+			x_[i] = (x[i/2 + 1] + x[i/2]) / 2.0;
 			y_[i] = ni.interpolate(x_[i]);
 		}
-
+		
 
 	}
 
 	//doubling the points once more
 
-	for (int i = 0; i < (n + (n - 1)) + (2 * n - 2); i++)
+	for (int i = 0; i < (n + (n - 1))+(2*n-2); i++)
 	{
 		if (i % 2 != 1)
 		{
@@ -359,100 +583,22 @@ void interpolate(string filename) {
 
 
 	}
-
+	
 
 	//Output to file
 	ofstream outfile1;
-	outfile1.open("newton_doublePoints_" + filename);
-	for (i = 0; i < 2 * n - 1; i++)
-		outfile1 << x_[i] << "," << y_[i] << endl;
+	outfile1.open("Spline_doublePoints_"+filename);
+	for (i = 0; i < 2*n-1; i++)
+		outfile1 << x_[i]<<","<<y_[i]<< endl;
 	outfile1.close();
 
 	ofstream outfile2;
-	outfile2.open("newton_FourPoints_" + filename);
+	outfile2.open("Spline_FourPoints_"+ filename);
 	for (i = 0; i < (n + (n - 1)) + (2 * n - 2); i++)
 		outfile2 << x__[i] << "," << y__[i] << endl;
 	outfile2.close();
-
-	////////////////////////////////////////////////////////
-	// spline interpolation:
-	///////////////////////////////////////////////////////
-	cout << "\nSpline Interpolation: " << endl;
-	cout << "=======================" << endl;
-
-	//Define interpolation
-
-	Spline_interpolator s(x, y, n);
-
-	//Fit to get coefficients
-	s.fit();
-
-	Matrix s_coeff = s.get_coefficients();
-
-	cout << s_coeff;
-	cout << endl;
-
-	//Output to file
-	string s_coeff_filename = "spline_coeff_" + filename;
-	ofstream s_outfile;
-	outfile.open(coeff_filename);
-	outfile << s_coeff;
- 
-	outfile.close();
 	
-	//doubling the points x and y.
-	//double* x_ = new double[2 * n - 1];
-	//double* y_ = new double[2 * n - 1];
-	//double* x__ = new double[(n + (n - 1)) + (2 * n - 2)];
-	//double* y__ = new double[(n + (n - 1)) + (2 * n - 2)];
-	for (int i = 0; i < n + (n - 1); i++)
-	{
-		if (i % 2 != 1)
-		{
-			x_[i] = x[i / 2];
-			y_[i] = y[i / 2];
-		}
-		else
-		{
-			x_[i] = (x[i / 2 + 1] + x[i / 2]) / 2.0;
-			y_[i] = s.interpolate(x_[i]);
-		}
-
-
-	}
-
-	//doubling the points once more
-
-	for (int i = 0; i < (n + (n - 1)) + (2 * n - 2); i++)
-	{
-		if (i % 2 != 1)
-		{
-			x__[i] = x_[i / 2];
-			y__[i] = y_[i / 2];
-		}
-		else
-		{
-			x__[i] = (x_[i / 2 + 1] + x_[i / 2]) / 2.0;
-			y__[i] = s.interpolate(x__[i]);
-		}
-
-
-	}
-
-
-	//Output to file
-	//ofstream outfile1;
-	outfile1.open("Spline_doublePoints_" + filename);
-	for (i = 0; i < 2 * n - 1; i++)
-		outfile1 << x_[i] << "," << y_[i] << endl;
-	outfile1.close();
-
-	//ofstream outfile2;
-	outfile2.open("Spline_FourPoints_" + filename);
-	for (i = 0; i < (n + (n - 1)) + (2 * n - 2); i++)
-		outfile2 << x__[i] << "," << y__[i] << endl;
-	outfile2.close();
-
+	
 
 }
 
@@ -465,19 +611,24 @@ int main()
 	int number = 0;
 	cout << "Chose what do you want to do: \n \t0: Gauss-Seidel test. \n \t1: Single variable Polynomial Regression. \n\t2: 2D Ploynomial Regression. \n\t3: Interpolation. \n";
 	cin >> number;
-
 	if (number == 0)
 	{
-		double temp_[12] = { 3,-0.1, -0.2, 7.85, 0.1, 7, -0.3, -19.3, 0.3, -0.2, 10, 71.4 };
+		//double temp_[12] = { 3,-0.1, -0.2, 7.85, 0.1, 7, -0.3, -19.3, 0.3, -0.2, 10, 71.4};
+		//double temp_[12] = { 3,-0.1, -0.2, 7.85, 0.1, 12, -0.3, -19.3, 0.3, -0.2, 10, 71.4 };
+		//double temp_[12] = { 5,4, 2, 1, 1, 5, 0, -1, 1, -1.5, 4, 3 };
+		double temp_[12] = {10,45,285,117.865,45,285,2025,729.42,285,2025,15333,5198.74};
 		Matrix toto(3, 4, temp_);
 		Linear_system soso(3, 4, toto);
 		cout << "\nUsing Gauss elimination:\n" << soso.solve() << endl;
 		double initials[3] = { 0, 0, 0 };
-		cout << "\nUsing Seidel elimination:\n" << soso.solve_iteratively(initials, 100) << endl;
+		Linear_system soso1(3, 4, toto);
+		cout << "\nUsing Seidel elimination:\n" << soso1.solve_iteratively(initials, 100) << endl;
 		int n_ = 0;
-		cout << "\nUsing Seidel elimination with solve_until:\n" << soso.solve_until(initials, n_, 0.01) << endl;
+		Linear_system soso2(3, 4, toto);
+		cout << "\nUsing Seidel elimination with solve_until:\n" << soso2.solve_until(initials, n_, 0.00000001) << endl;
 		cout << "\nNumber of iterations: " << n_ << endl;
 	}
+
 
 	else if (number == 1)
 	{
@@ -500,7 +651,7 @@ int main()
 			cout << "\n\nUsing Second Dataset:" << endl;
 			cout << "===========================" << endl;
 
-			//regress_line("2_a_dataset_2.csv", m, s);
+			regress_line("2_a_dataset_2.csv", m, s);
 	
 
 	}
